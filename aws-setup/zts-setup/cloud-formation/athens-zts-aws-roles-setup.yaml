@@ -1,0 +1,154 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Roles needed for athens zts setup
+Parameters:
+  AthensServiceRole:
+    Type: String
+    Description: The Athens role name for the service
+    Default: athenz.zts-service
+  AthensDeploymentRole:
+    Type: String
+    Description: The Athens role name for the service
+    Default: athenz.zts-deployment
+    Default: athenz.zts-deployment
+Resources:
+  DeploymentRole:
+      Type: 'AWS::IAM::Role'
+      Metadata:
+        Comment: deployement role for athens.
+      Properties:
+        AssumeRolePolicyDocument:
+          Statement:
+            - Effect: "Allow"
+              Principal:
+                AWS: !GetAtt AthensServiceEC2Role.Arn
+              Action: 'sts:AssumeRole'
+        Policies:
+         -
+           PolicyName: !Sub ${AthensDeploymentRole}.policy
+           PolicyDocument:
+             Version: "2012-10-17"
+             Statement:
+              - Sid: "ec2"
+                Effect: "Allow"
+                Action:
+                  - "ec2:CopyImage"
+                  - "ec2:CopySnapshot"
+                  - "ec2:CreateImage"
+                  - "ec2:CreateSecurityGroup"
+                  - "ec2:CreateSnapshot"
+                  - "ec2:CreateTags"
+                  - "ec2:CreateVolume"
+                  - "ec2:DeleteSecurityGroup"
+                  - "ec2:DeleteSnapshot"
+                  - "ec2:DeleteTags"
+                  - "ec2:DeleteVolume"
+                  - "ec2:DeregisterImage"
+                  - "ec2:Describe*"
+                  - "ec2:DetachVolume"
+                  - "ec2:Get*"
+                  - "ec2:ModifyImageAttribute"
+                  - "ec2:ModifyInstanceAttribute"
+                  - "ec2:MonitorInstances"
+                  - "ec2:RegisterImage"
+                  - "ec2:RevokeSecurityGroupIngress"
+                  - "ec2:RunInstances"
+                  - "ec2:StartInstances"
+                  - "ec2:StopInstances"
+                  - "ec2:TerminateInstances"
+                Resource: '*'
+              - Sid: 'cloudwatch'
+                Effect: "Allow"
+                Action:
+                  - "cloudwatch:EnableAlarmActions"
+                  - "cloudwatch:DeleteAlarms"
+                  - "cloudwatch:DescribeAlarmHistory"
+                  - "cloudwatch:DescribeAlarms"
+                  - "cloudwatch:DescribeAlarmsForMetric"
+                  - "cloudwatch:DisableAlarmActions"
+                  - "cloudwatch:GetMetricStatistics"
+                  - "cloudwatch:GetMetricData"
+                  - "cloudwatch:ListMetrics"
+                  - "cloudwatch:PutMetricAlarm"
+                  - "cloudwatch:PutMetricData"
+                Resource: 'arn:aws:s3:::public-cloud-platforms-public/cloudformation/oath-*'
+              - Sid: 'autoscaling'
+                Effect: "Allow"
+                Action:
+                  - "autoscaling:AttachInstances"
+                  - "autoscaling:AttachLoadBalancers"
+                  - "autoscaling:AttachLoadBalancerTargetGroups"
+                  - "autoscaling:CreateAutoScalingGroup"
+                  - "autoscaling:CreateLaunchConfiguration"
+                  - "autoscaling:CreateOrUpdateTags"
+                  - "autoscaling:Describe*"
+                  - "autoscaling:DetachInstances"
+                  - "autoscaling:DeleteTags"
+                  - "autoscaling:SetDesiredCapacity"
+                  - "autoscaling:SetInstanceHealth"
+                  - "autoscaling:SetInstanceProtection"
+                  - "autoscaling:TerminateInstanceInAutoScalingGroup"
+                  - "autoscaling:UpdateAutoScalingGroup"
+                Resource: '*'
+              - Sid: 'elasticloadbalancing'
+                Effect: "Allow"
+                Action:
+                  - "elasticloadbalancing:DeregisterInstancesFromLoadBalancer"
+                  - "elasticloadbalancing:Describe*"
+                  - "elasticloadbalancing:RegisterInstancesWithLoadBalancer"
+                Resource: '*'
+              - Sid: 'iam'
+                Effect: "Allow"
+                Action:
+                  - "iam:GetRole"
+                  - "iam:PassRole"
+                  - "iam:GetInstanceProfile"
+                  - "iam:GetPolicy"
+                  - "iam:GetRolePolicy"
+                Resource: "*"
+        Path: /
+        RoleName: !Ref AthensDeploymentRole
+      DependsOn: AthensEc2InstanceProfile
+  AthensServiceEC2Role:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                 - "ec2.amazonaws.com"
+            Action:
+                - "sts:AssumeRole"
+      Policies:
+        -
+          PolicyName: !Sub ${AthensServiceRole}.policy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+            - Effect: "Allow"
+              Action:
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+                - logs:DescribeLogStreams
+                - logs:DescribeLogGroups
+              Resource: "arn:aws:logs:*:*:*"
+            - Effect: "Allow"
+              Action:
+                - rds-db:connect
+              Resource:
+                - !Sub arn:aws:rds-db:us-west-2:${AWS::AccountId}:dbuser:*/zts
+                - !Sub arn:aws:rds-db:us-east-1:${AWS::AccountId}:dbuser:*/zts
+            - Effect: "Allow"
+              Action: "ec2:DescribeTags"
+              Resource: "*"
+      Path: /
+      RoleName: !Ref AthensServiceRole
+  AthensEc2InstanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      Roles:
+        - !Ref AthensServiceEC2Role
+      InstanceProfileName: !Ref AthensServiceRole

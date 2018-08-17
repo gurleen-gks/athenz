@@ -1,0 +1,15 @@
+[Unit]
+Description=Athens UI
+Wants=network-online.target ntpd.service
+After=network-online.target
+
+[Service]
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=athenz-ui
+Restart=on-failure
+RestartSec=20
+ExecStart=/bin/bash /opt/athenz-ui/bin/start.sh
+
+[Install]
+WantedBy=multi-user.target
