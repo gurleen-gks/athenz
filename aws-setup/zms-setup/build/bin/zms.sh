@@ -26,7 +26,7 @@ java -server $JAVA_OPTS                                                         
      -Dathenz.aws.zms.bucket_name=$ZMS_DATA_BUCKET_NAME                             \
      -Dathenz.ssl_key_store_password_appname=$ZMS_DATA_BUCKET_NAME                  \
      -Dathenz.ssl_trust_store_password_appname=$ZMS_DATA_BUCKET_NAME                \
-     -Dathenz.zms.jdbc_store=jdbc:mysql://${RDS_MASTER}:3306/zms_server             \
+     -Dathenz.zms.jdbc_store=jdbc:mysql://${RDS_MASTER}:3306/${DATASTORE_NAME}      \
      -Dathenz.zms.jdbc_app_name=$ZMS_DATA_BUCKET_NAME                               \
      -Dathenz.zms.aws_rds_master_instance=$RDS_MASTER                               \
      -Dathenz.aws.s3.region=$REGION                                                 \
