@@ -9,7 +9,7 @@ StandardError=syslog
 SyslogIdentifier=athenz-ui
 Restart=on-failure
 RestartSec=20
-ExecStart=/bin/bash /opt/athenz-ui/bin/start.sh
+ExecStart=/opt/athenz-ui/bin/ui.sh
 
 [Install]
 WantedBy=multi-user.target

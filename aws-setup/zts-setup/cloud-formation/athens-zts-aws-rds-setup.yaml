@@ -94,11 +94,11 @@ Parameters:
   Route53HostedZoneName:
     Type: String
     Description: The hosted zone name to place a CNAME entry for. Must end with a period. Empty string means do not create one.
-    Default: "athens.aws.oath.cloud."
+    Default: "home-gurleenk.aws.oath.cloud."
   Route53DatabaseRecordName:
     Type: String
     Description: The hosted records to be added
-    Default: "test.db.zts.athens.aws.oath.cloud."
+    Default: "db.zts.home-gurleenk.aws.oath.cloud."
 Conditions:
   CreateDNSRecordSet: !Not [!Equals [ !Ref Route53HostedZoneName, '']]
   EnableDatabaseEncryption: !Equals [ !Ref EncryptDatabaseStorage , true]

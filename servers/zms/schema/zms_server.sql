@@ -8,31 +8,31 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema zms_server
+-- Schema zmsserver
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema zms_server
+-- Schema zmsserver
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `zms_server` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
-USE `zms_server` ;
+CREATE SCHEMA IF NOT EXISTS `zmsserver` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
+USE `zmsserver` ;
 
 -- -----------------------------------------------------
--- Table `zms_server`.`domain`
+-- Table `zmsserver`.`domain`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `zms_server`.`domain` (
+CREATE TABLE IF NOT EXISTS `zmsserver`.`domain` (
   `domain_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(512) NOT NULL,
+  `name` VARCHAR(51) NOT NULL,
   `description` VARCHAR(4096) NOT NULL DEFAULT '',
-  `org` VARCHAR(1024) NOT NULL DEFAULT '',
+  `org` VARCHAR(102) NOT NULL DEFAULT '',
   `uuid` VARCHAR(128) NOT NULL DEFAULT '',
   `enabled` TINYINT(1) NOT NULL DEFAULT 1,
   `audit_enabled` TINYINT(1) NOT NULL DEFAULT 0,
   `ypm_id` INT UNSIGNED NOT NULL DEFAULT 0,
-  `account` VARCHAR(128) NOT NULL DEFAULT '',
+  `account` VARCHAR(24) NOT NULL DEFAULT '',
   `modified` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
   `created` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  `application_id` VARCHAR(128) NOT NULL DEFAULT '',
+  `application_id` VARCHAR(24) NOT NULL DEFAULT '',
   PRIMARY KEY (`domain_id`),
   UNIQUE INDEX `uq_name` (`name` ASC),
   INDEX `idx_modified` (`modified` ASC),
@@ -43,43 +43,43 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `zms_server`.`role`
+-- Table `zmsserver`.`role`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `zms_server`.`role` (
+CREATE TABLE IF NOT EXISTS `zmsserver`.`role` (
   `role_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `domain_id` INT UNSIGNED NOT NULL,
-  `name` VARCHAR(512) NOT NULL,
-  `trust` VARCHAR(512) NOT NULL DEFAULT '',
+  `name` VARCHAR(51) NOT NULL,
+  `trust` VARCHAR(51) NOT NULL DEFAULT '',
   `modified` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
   `created` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   PRIMARY KEY (`role_id`),
   UNIQUE INDEX `uq_domain_role` (`domain_id` ASC, `name` ASC),
   CONSTRAINT `fk_role_domain`
     FOREIGN KEY (`domain_id`)
-    REFERENCES `zms_server`.`domain` (`domain_id`)
+    REFERENCES `zmsserver`.`domain` (`domain_id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `zms_server`.`principal`
+-- Table `zmsserver`.`principal`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `zms_server`.`principal` (
+CREATE TABLE IF NOT EXISTS `zmsserver`.`principal` (
   `principal_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(512) NOT NULL,
+  `name` VARCHAR(51) NOT NULL,
   PRIMARY KEY (`principal_id`),
   UNIQUE INDEX `uq_name` (`name` ASC))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `zms_server`.`policy`
+-- Table `zmsserver`.`policy`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `zms_server`.`policy` (
+CREATE TABLE IF NOT EXISTS `zmsserver`.`policy` (
   `policy_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `domain_id` INT UNSIGNED NOT NULL,
-  `name` VARCHAR(512) NOT NULL,
+  `name` VARCHAR(51) NOT NULL,
   `modified` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
   `created` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   PRIMARY KEY (`policy_id`),
@@ -87,20 +87,20 @@ CREATE TABLE IF NOT EXISTS `zms_server`.`policy` (
   UNIQUE INDEX `uq_domain_policy` (`name` ASC, `domain_id` ASC),
   CONSTRAINT `fk_policy_domain`
     FOREIGN KEY (`domain_id`)
-    REFERENCES `zms_server`.`domain` (`domain_id`)
+    REFERENCES `zmsserver`.`domain` (`domain_id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `zms_server`.`assertion`
+-- Table `zmsserver`.`assertion`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `zms_server`.`assertion` (
+CREATE TABLE IF NOT EXISTS `zmsserver`.`assertion` (
   `assertion_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `policy_id` INT UNSIGNED NOT NULL,
-  `role` VARCHAR(512) NOT NULL,
-  `resource` VARCHAR(512) NOT NULL,
+  `role` VARCHAR(51) NOT NULL,
+  `resource` VARCHAR(51) NOT NULL,
   `action` VARCHAR(128) NOT NULL,
   `effect` VARCHAR(16) NOT NULL DEFAULT 'ALLOW',
   PRIMARY KEY (`assertion_id`),
@@ -111,23 +111,23 @@ CREATE TABLE IF NOT EXISTS `zms_server`.`assertion` (
   INDEX `idx_effect` (`effect` ASC),
   CONSTRAINT `fk_policy_assertion_policy`
     FOREIGN KEY (`policy_id`)
-    REFERENCES `zms_server`.`policy` (`policy_id`)
+    REFERENCES `zmsserver`.`policy` (`policy_id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `zms_server`.`service`
+-- Table `zmsserver`.`service`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `zms_server`.`service` (
+CREATE TABLE IF NOT EXISTS `zmsserver`.`service` (
   `service_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `domain_id` INT UNSIGNED NOT NULL,
-  `name` VARCHAR(512) NOT NULL,
-  `provider_endpoint` VARCHAR(512) NOT NULL DEFAULT '',
-  `executable` VARCHAR(256) NOT NULL DEFAULT '',
-  `svc_user` VARCHAR(256) NOT NULL DEFAULT '',
-  `svc_group` VARCHAR(256) NOT NULL DEFAULT '',
+  `name` VARCHAR(51) NOT NULL,
+  `provider_endpoint` VARCHAR(51) NOT NULL DEFAULT '',
+  `executable` VARCHAR(51) NOT NULL DEFAULT '',
+  `svc_user` VARCHAR(51) NOT NULL DEFAULT '',
+  `svc_group` VARCHAR(51) NOT NULL DEFAULT '',
   `modified` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
   `created` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `description` VARCHAR(4096) NOT NULL DEFAULT '',
@@ -136,65 +136,65 @@ CREATE TABLE IF NOT EXISTS `zms_server`.`service` (
   UNIQUE INDEX `uq_domain_service` (`name` ASC, `domain_id` ASC),
   CONSTRAINT `fk_service_domain`
     FOREIGN KEY (`domain_id`)
-    REFERENCES `zms_server`.`domain` (`domain_id`)
+    REFERENCES `zmsserver`.`domain` (`domain_id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `zms_server`.`public_key`
+-- Table `zmsserver`.`public_key`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `zms_server`.`public_key` (
+CREATE TABLE IF NOT EXISTS `zmsserver`.`public_key` (
   `service_id` INT UNSIGNED NOT NULL,
   `key_id` VARCHAR(128) NOT NULL,
-  `key_value` TEXT(65535) NOT NULL,
+  `key_value` TEXT(655) NOT NULL,
   PRIMARY KEY (`service_id`, `key_id`),
   CONSTRAINT `fk_service_public_key_service`
     FOREIGN KEY (`service_id`)
-    REFERENCES `zms_server`.`service` (`service_id`)
+    REFERENCES `zmsserver`.`service` (`service_id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `zms_server`.`host`
+-- Table `zmsserver`.`host`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `zms_server`.`host` (
+CREATE TABLE IF NOT EXISTS `zmsserver`.`host` (
   `host_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(512) NOT NULL,
+  `name` VARCHAR(51) NOT NULL,
   PRIMARY KEY (`host_id`),
   UNIQUE INDEX `uq_name` (`name` ASC))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `zms_server`.`service_host`
+-- Table `zmsserver`.`service_host`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `zms_server`.`service_host` (
+CREATE TABLE IF NOT EXISTS `zmsserver`.`service_host` (
   `service_id` INT UNSIGNED NOT NULL,
   `host_id` INT UNSIGNED NOT NULL,
   INDEX `idx_host` (`host_id` ASC, `service_id` ASC),
   PRIMARY KEY (`service_id`, `host_id`),
   CONSTRAINT `fk_service_host_host`
     FOREIGN KEY (`host_id`)
-    REFERENCES `zms_server`.`host` (`host_id`)
+    REFERENCES `zmsserver`.`host` (`host_id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_service_host_service`
     FOREIGN KEY (`service_id`)
-    REFERENCES `zms_server`.`service` (`service_id`)
+    REFERENCES `zmsserver`.`service` (`service_id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `zms_server`.`entity`
+-- Table `zmsserver`.`entity`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `zms_server`.`entity` (
-  `name` VARCHAR(256) NOT NULL,
+CREATE TABLE IF NOT EXISTS `zmsserver`.`entity` (
+  `name` VARCHAR(51) NOT NULL,
   `domain_id` INT UNSIGNED NOT NULL,
   `value` TEXT(65536) NOT NULL,
   `modified` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
@@ -202,16 +202,16 @@ CREATE TABLE IF NOT EXISTS `zms_server`.`entity` (
   PRIMARY KEY (`name`, `domain_id`),
   CONSTRAINT `fk_entity_domain`
     FOREIGN KEY (`domain_id`)
-    REFERENCES `zms_server`.`domain` (`domain_id`)
+    REFERENCES `zmsserver`.`domain` (`domain_id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `zms_server`.`role_member`
+-- Table `zmsserver`.`role_member`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `zms_server`.`role_member` (
+CREATE TABLE IF NOT EXISTS `zmsserver`.`role_member` (
   `role_id` INT UNSIGNED NOT NULL,
   `principal_id` INT UNSIGNED NOT NULL,
   `expiration` DATETIME(3) NULL,
@@ -219,58 +219,58 @@ CREATE TABLE IF NOT EXISTS `zms_server`.`role_member` (
   INDEX `idx_principal` (`principal_id` ASC, `role_id` ASC),
   CONSTRAINT `fk_role_member_role`
     FOREIGN KEY (`role_id`)
-    REFERENCES `zms_server`.`role` (`role_id`)
+    REFERENCES `zmsserver`.`role` (`role_id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_role_member_principal`
     FOREIGN KEY (`principal_id`)
-    REFERENCES `zms_server`.`principal` (`principal_id`)
+    REFERENCES `zmsserver`.`principal` (`principal_id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `zms_server`.`domain_template`
+-- Table `zmsserver`.`domain_template`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `zms_server`.`domain_template` (
+CREATE TABLE IF NOT EXISTS `zmsserver`.`domain_template` (
   `domain_id` INT UNSIGNED NOT NULL,
   `template` VARCHAR(64) NOT NULL,
   UNIQUE INDEX `uq_domain_template` (`template` ASC, `domain_id` ASC),
   PRIMARY KEY (`domain_id`, `template`),
   CONSTRAINT `fk_domain_template_domain`
     FOREIGN KEY (`domain_id`)
-    REFERENCES `zms_server`.`domain` (`domain_id`)
+    REFERENCES `zmsserver`.`domain` (`domain_id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `zms_server`.`role_audit_log`
+-- Table `zmsserver`.`role_audit_log`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `zms_server`.`role_audit_log` (
+CREATE TABLE IF NOT EXISTS `zmsserver`.`role_audit_log` (
   `audit_log_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `role_id` INT UNSIGNED NOT NULL,
-  `admin` VARCHAR(512) NOT NULL,
-  `member` VARCHAR(512) NOT NULL,
+  `admin` VARCHAR(51) NOT NULL,
+  `member` VARCHAR(51) NOT NULL,
   `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `action` VARCHAR(32) NOT NULL,
-  `audit_ref` VARCHAR(512) NOT NULL,
+  `audit_ref` VARCHAR(51) NOT NULL,
   INDEX `fk_role_audit_log_role_id_idx` (`role_id` ASC),
   PRIMARY KEY (`audit_log_id`),
   CONSTRAINT `fk_role_audit_log_role`
     FOREIGN KEY (`role_id`)
-    REFERENCES `zms_server`.`role` (`role_id`)
+    REFERENCES `zmsserver`.`role` (`role_id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `zms_server`.`quota`
+-- Table `zmsserver`.`quota`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `zms_server`.`quota` (
+CREATE TABLE IF NOT EXISTS `zmsserver`.`quota` (
   `domain_id` INT UNSIGNED NOT NULL,
   `subdomain` INT UNSIGNED NOT NULL,
   `role` INT UNSIGNED NOT NULL,
@@ -286,7 +286,7 @@ CREATE TABLE IF NOT EXISTS `zms_server`.`quota` (
   PRIMARY KEY (`domain_id`),
   CONSTRAINT `fk_quota_domain1`
     FOREIGN KEY (`domain_id`)
-    REFERENCES `zms_server`.`domain` (`domain_id`)
+    REFERENCES `zmsserver`.`domain` (`domain_id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

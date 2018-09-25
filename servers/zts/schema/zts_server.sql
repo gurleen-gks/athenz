@@ -21,13 +21,13 @@ USE `zts_store` ;
 -- Table `zts_store`.`certificates`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `zts_store`.`certificates` (
-  `provider` VARCHAR(512) NOT NULL,
-  `instanceId` VARCHAR(512) NOT NULL,
-  `service` VARCHAR(512) NOT NULL,
-  `currentSerial` VARCHAR(128) NOT NULL,
+  `provider` VARCHAR(51) NOT NULL,
+  `instanceId` VARCHAR(51) NOT NULL,
+  `service` VARCHAR(51) NOT NULL,
+  `currentSerial` VARCHAR(28) NOT NULL,
   `currentTime` DATETIME(3) NOT NULL,
   `currentIP` VARCHAR(64) NOT NULL,
-  `prevSerial` VARCHAR(128) NOT NULL,
+  `prevSerial` VARCHAR(28) NOT NULL,
   `prevTime` DATETIME(3) NOT NULL,
   `prevIP` VARCHAR(64) NOT NULL,
   `clientCert` TINYINT(1) NOT NULL DEFAULT 0,

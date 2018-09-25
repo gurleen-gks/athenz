@@ -7,8 +7,6 @@ After=network-online.target
 ExecStart=/opt/zms/bin/zms.sh
 Restart=on-failure
 RestartSec=20
-User=athenz-zms
-Group=athenz
 
 [Install]
 WantedBy=multi-user.target

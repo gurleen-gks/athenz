@@ -23,9 +23,8 @@ java -server $JAVA_OPTS                                                         
      -Dathenz.zts.root_dir=/opt/zts                                                       \
      -Dlogback.configurationFile=/opt/zts/conf/logback.xml                                \
      -Dathenz.prop_file=/opt/zts/conf/athenz.properties                                   \
-     -Dathenz.zts.prop_file=/opt/zts/conf/zts.properties                                  \
-     -Dathenz.zts.aws_bucket_name=$ZTS_DOMAIN_BUCKET_NAME                                 \
-     -Dathenz.zts.cert_jdbc_store=jdbc:mysql://${RDS_MASTER}:3306/zts_store               \
+     -Dathenz.zts.prop_file=/opt/zts/conf/zts.properties                                  \                                 \
+     -Dathenz.zts.cert_jdbc_store=jdbc:mysql://${RDS_MASTER}:3306/${DATASTORE_NAME}               \
      -Dathenz.aws.zts.bucket_name=$ZTS_DATA_BUCKET_NAME                                   \
      -Dathenz.zts.cert_jdbc_app_name=$ZTS_DATA_BUCKET_NAME                                \
      -Dathenz.zts.ssl_key_store_password_appname=$ZTS_DATA_BUCKET_NAME                    \

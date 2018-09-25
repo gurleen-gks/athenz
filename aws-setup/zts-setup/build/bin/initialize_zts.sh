@@ -33,3 +33,4 @@ echo "generating zts key store /opt/zts/bin/aws_zts_keystore_gen.sh $ZTS_DATA_BU
 rm -f $KEY_STORE_PATH
 /opt/zts/bin/aws_zts_keystore_gen.sh $ZTS_DATA_BUCKET_NAME $KEY_STORE_PATH
 
+

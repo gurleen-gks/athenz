@@ -27,7 +27,7 @@ cleanup
 # when we store files locally
 
 rds_ca_certs=service_rds_ca_certs
-zms_ca_certs=service_x509_ca_certs
+zms_ca_certs=zms_service_x509_ca_certs
 
 jdk_ca_certs_path=$1
 jdk_ca_certs_pwd=$2

@@ -28,4 +28,7 @@ echo "generating zms key store /opt/zms/bin/aws_zms_keystore_gen.sh $ZMS_DATA_BU
 rm -f $KEY_STORE_PATH
 /opt/zms/bin/aws_zms_keystore_gen.sh $ZMS_DATA_BUCKET_NAME $KEY_STORE_PATH
 
+echo "Adding domain admin /opt/zms/bin/add_user.sh $DOMAIN_ADMIN $ZMS_DATA_BUCKET_NAME"
+/opt/zms/bin/add_user.sh $DOMAIN_ADMIN $ZMS_DATA_BUCKET_NAME
+
 

@@ -7,7 +7,7 @@ Parameters:
   KeyName:
     Type: String
     Description: The EC2 key pair
-    Default: "zts-test-aws"
+    Default: "athens-opensource-test"
   ServiceName:
     Type: String
     Description: The service name for ZMS server
@@ -25,7 +25,7 @@ Parameters:
   ImageId:
     Type: AWS::EC2::Image::Id
     Description: "The ImageId to use for the EC2 instance.  Should be a format like ami-XXXXXXXX"
-    Default: "ami-051b0771f73c12ce3"
+    Default: "ami-018fcaa4a042da17a"
   AutoScalingMinSize:
     Type: String
     Description: The Athens domain for the account

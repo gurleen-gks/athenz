@@ -1,14 +1,14 @@
 {
   "variables": {
-    "subnet_id":"subnet-4c542507",
-    "vpc_id": "vpc-7a7f8402",
+    "subnet_id":"subnet-06e33e29a2470e081",
+    "vpc_id": "vpc-0bba838a351ad9d58",
     "aws_region": "{{env `AWS_REGION`}}",
-    "aws_ami_name": "opensource-ui-aws-cd-image-final",
+    "aws_ami_name": "opensource-ui-aws-cd-test-1",
     "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
     "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
     "aws_session_token": "{{env `AWS_SESSION_TOKEN`}}",
-    "ssh_keypair_name":"ui-test-aws",
-    "ssh_private_key_file":"packer/keys/ui-test-aws.pem",
+    "ssh_keypair_name":"athens-opensource-test",
+    "ssh_private_key_file":"packer/keys/athens-opensource-test.pem",
     "source_ami": "ami-02c71d7a"
   },
   "builders": [
@@ -35,7 +35,7 @@
       "encrypt_boot": true,
       "instance_type": "t2.micro",
       "ami_name": "{{user `aws_ami_name`}}",
-      "ami_description": "ZMS Image for cloud formation",
+      "ami_description": "UI Image for cloud formation",
       "associate_public_ip_address": "true",
       "subnet_id": "{{ user `subnet_id` }}",
       "vpc_id": "{{ user `vpc_id` }}"
@@ -51,43 +51,35 @@
       ]
     },
     {
-      "type": "shell",
-      "execute_command": "echo {{user `ssh_username`}} | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
-      "inline": [
-        "mkdir -p /opt/ui/tars/",
-        "mkdir -p /opt/ui/bin/",
-        "mkdir -p /opt/ui/conf/",
-        "mkdir -p /opt/ui/conf/",
-        "chmod 777 /opt/ui -R"
-      ]
-    },
-    {
       "type": "file",
       "source": "tars/",
-      "destination": "/opt/ui/tars/"
+      "destination": "/opt/"
     },
     {
       "type": "shell",
       "execute_command": "echo {{user `ssh_username`}} | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
       "inline": [
-        "sudo tar -xzf /opt/ui/tars/athenz-ui-bin.tar.gz -C /opt/ui/",
-        "chmod 777 /opt/ui -R"
+        "sudo tar -xzf /opt/athenz-ui-bin.tar.gz -C /opt/",
+        "sudo chmod 777 /opt/athenz-ui",
+        "mkdir -p /opt/athenz-ui/conf",
+        "mkdir -p /opt/athenz-ui/logs",
+        "sudo chmod 777 /opt/athenz-ui -R"
       ]
     },
     {
       "type": "file",
-      "source": "build/bin",
-      "destination": "/opt/ui/bin/"
+      "source": "build/bin/",
+      "destination": "/opt/athenz-ui/bin/"
     },
     {
       "type": "file",
-      "source": "build/conf",
-      "destination": "/opt/ui/conf/"
+      "source": "build/conf/",
+      "destination": "/opt/athenz-ui/conf/"
     },
     {
     "type": "file",
     "source": "build/service/",
-    "destination": "/opt/ui/service"
+    "destination": "/opt/athenz-ui/"
     },
     {
       "type": "shell",

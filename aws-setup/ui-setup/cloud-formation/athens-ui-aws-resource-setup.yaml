@@ -59,15 +59,15 @@ Parameters:
   S3AccessLogBucketName:
       Type: String
       Description: S3 bucket name to store access logs
-      Default: "test-athenz-audit-log-dev-us-west-2"
+      Default: "athenz-access-logs-bucket"
   Route53HostedZoneName:
     Type: String
     Description: The hosted zone name to place a CNAME entry for. Must end with a period. Empty string means do not create one.
-    Default: "athens.aws.oath.cloud."
+    Default: "home-gurleenk.aws.oath.cloud."
   Route53RecordName:
     Type: String
     Description: The hosted records to be added
-    Default: "test.ui.athens.aws.oath.cloud."
+    Default: "ui.home-gurleenk.aws.oath.cloud."
 Conditions:
   CreateDNSRecordSet: !Not [!Equals [ !Ref Route53HostedZoneName, '']]
 
@@ -487,7 +487,7 @@ Resources:
       HealthCheck:
         HealthyThreshold: 2
         Interval: 5
-        Target: !Sub HTTPS:8443/status
+        Target: TCP:443
         Timeout: 2
         UnhealthyThreshold: 4
       Listeners:
@@ -495,14 +495,6 @@ Resources:
           InstanceProtocol: TCP
           LoadBalancerPort: 443
           Protocol: TCP
-      Policies:
-        - PolicyName: "EnableProxyProtocol"
-          PolicyType: "ProxyProtocolPolicyType"
-          Attributes:
-          - Name: ProxyProtocol
-            Value: 'true'
-          InstancePorts:
-          - '443'
       LoadBalancerName: !Sub ${Environment}-elb-${UIServiceName}-${AWS::Region}
       Scheme: 'internet-facing'
       ConnectionDrainingPolicy:

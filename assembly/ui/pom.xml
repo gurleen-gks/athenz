@@ -69,7 +69,7 @@
               <outputDirectory>../../../athenz/aws-setup/ui-setup/tars/</outputDirectory>
               <finalName>athenz-ui</finalName>
               <descriptors>
-                <descriptor>zms.xml</descriptor>
+                <descriptor>ui.xml</descriptor>
               </descriptors>
             </configuration>
           </execution>

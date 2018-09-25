@@ -59,15 +59,15 @@ Parameters:
   S3AccessLogBucketName:
       Type: String
       Description: S3 bucket name to store access logs
-      Default: "test-athenz-audit-log-dev-us-west-2"
+      Default: "athenz-access-logs-bucket"
   Route53HostedZoneName:
     Type: String
     Description: The hosted zone name to place a CNAME entry for. Must end with a period. Empty string means do not create one.
-    Default: "athens.aws.oath.cloud."
+    Default: "home-gurleenk.aws.oath.cloud."
   Route53RecordName:
     Type: String
     Description: The hosted records to be added
-    Default: "test.athens.aws.oath.cloud."
+    Default: "zms.home-gurleenk.aws.oath.cloud."
 Conditions:
   CreateDNSRecordSet: !Not [!Equals [ !Ref Route53HostedZoneName, '']]
 
@@ -534,7 +534,7 @@ Resources:
         HealthyThreshold: 2
         Interval: 5
         Target: !Sub HTTPS:8443/${ZMSServiceName}/v1/status
-        Timeout: 5
+        Timeout: 3
         UnhealthyThreshold: 4
       Listeners:
         - InstancePort: 4443

@@ -18,7 +18,6 @@ fi
 
 zms_public_key_file=zms_service_x509_key_public.pem
 zts_public_key_file=zts_service_x509_key_public.pem
-self_cert_signer_key=self_cert_signer_key
 
 outputFile=$1
 ztsDataBucketName=$2
